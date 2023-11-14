@@ -18,7 +18,7 @@ class App {
         break;
       }
     }
-    await OutputView.printTotalOrderAmount(menu);
+    await OutputView.printTotalOrderAmount(date, menu);
   }
 }
 
