@@ -43,6 +43,8 @@ const OutputView = {
     const calculatorObject = new Calculator();
     const dDayDiscount = await calculatorObject.calculateDDayDiscount(date);
     if (dDayDiscount != 0) Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
+    const givewayDiscount = await calculatorObject.calculateGivewayMenu(priceSum);
+    if (givewayDiscount) Console.print(`증정 이벤트: -${givewayDiscount.toLocaleString('ko-KR')}원`);
   },
 
   printTotalBenefitAmount() {

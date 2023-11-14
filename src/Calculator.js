@@ -9,13 +9,15 @@ class Calculator {
   #count;
   #totalOrderAmount;
   #dDayDiscountAmount;
+  #giveWayAmount;
 
-  constructor(orderMenu, name, count, totalOrderAmount, dDayDiscountAmount) {
+  constructor(orderMenu, name, count, totalOrderAmount, dDayDiscountAmount, giveWayAmount) {
     this.#orderMenu = orderMenu;
     this.#name = name;
     this.#count = count;
     this.#totalOrderAmount = totalOrderAmount;
     this.#dDayDiscountAmount = dDayDiscountAmount;
+    this.#giveWayAmount = giveWayAmount;
   }
 
   async splitMenu(menu) {
@@ -39,7 +41,11 @@ class Calculator {
   }
 
   async calculateGivewayMenu(totalOrderAmount) {
-    if (totalOrderAmount > 120000) return true;
+    if (totalOrderAmount > 120000) {
+      this.#giveWayAmount = 25000;
+      return this.#giveWayAmount;
+    }
+    return false;
   }
 
   async calculateDDayDiscount(date) {
@@ -47,6 +53,8 @@ class Calculator {
     if (date > 25) this.#dDayDiscountAmount = 0;
     return this.#dDayDiscountAmount;
   }
+
+  async calculateWeekDayDiscount(date) {}
 }
 
 export default Calculator;
