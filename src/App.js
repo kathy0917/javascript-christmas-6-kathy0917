@@ -20,6 +20,8 @@ class App {
         break;
       }
     }
+
+    await OutputView.printTotalOrderAmount(menu);
   }
 }
 

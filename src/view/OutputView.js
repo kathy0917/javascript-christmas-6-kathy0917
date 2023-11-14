@@ -1,4 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
+import Calculator from '../Calculator.js';
 
 const OutputView = {
   printOpening() {
@@ -11,12 +12,19 @@ const OutputView = {
   async printMenu(orderMenu) {
     Console.print('\n<주문 메뉴>');
     orderMenu.split(',').map((menu) => {
-      menu.split('-')[0];
       Console.print(`${menu.split('-')[0]} ${menu.split('-')[1]}개`);
     });
   },
-  printTotalOrderAmount() {
+  async printTotalOrderAmount(orderMenu) {
     Console.print('\n<할인 전 총주문 금액>');
+    let priceSum = 0;
+    const menuList = orderMenu.split(',');
+    for (let menu of menuList) {
+      const calculatorObject = new Calculator(menu);
+      await calculatorObject.splitMenu(menu);
+      priceSum += await calculatorObject.calculateTotalOrderAmount();
+    }
+    Console.print(`${priceSum.toLocaleString('ko-KR')}원`);
   },
   printGivewayMenu() {
     Console.print('\n<증정 메뉴>');
