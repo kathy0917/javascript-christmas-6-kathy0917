@@ -35,6 +35,10 @@ class Calculator {
 
     return this.#totalOrderAmount;
   }
+
+  async calcuateGivewayMenu(totalOrderAmount) {
+    if (totalOrderAmount > 120000) return true;
+  }
 }
 
 export default Calculator;

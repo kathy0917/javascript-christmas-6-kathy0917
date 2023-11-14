@@ -5,13 +5,11 @@ import OutputView from './view/OutputView.js';
 class App {
   async run() {
     OutputView.printOpening();
-
     let date = 0;
     while (true) {
       date = await InputView.readDate();
       if (date) break;
     }
-
     let menu = '';
     while (true) {
       menu = await InputView.readOrderMenu(date);
@@ -20,7 +18,6 @@ class App {
         break;
       }
     }
-
     await OutputView.printTotalOrderAmount(menu);
   }
 }

@@ -20,14 +20,17 @@ const OutputView = {
     let priceSum = 0;
     const menuList = orderMenu.split(',');
     for (let menu of menuList) {
-      const calculatorObject = new Calculator(menu);
+      const calculatorObject = new Calculator();
       await calculatorObject.splitMenu(menu);
       priceSum += await calculatorObject.calculateTotalOrderAmount();
     }
     Console.print(`${priceSum.toLocaleString('ko-KR')}원`);
+    await this.printGivewayMenu(priceSum);
   },
-  printGivewayMenu() {
+  async printGivewayMenu(priceSum) {
     Console.print('\n<증정 메뉴>');
+    const calculatorObject = new Calculator();
+    (await calculatorObject.calcuateGivewayMenu(priceSum)) === true ? Console.print('샴페인 1개') : Console.print('없음');
   },
   printBenefitDetails() {
     Console.print('\n<혜택 내역>');
