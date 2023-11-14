@@ -44,7 +44,7 @@ class Calculator {
 
   async calculateDDayDiscount(date) {
     this.#dDayDiscountAmount = 1000 + (date - 1) * 100;
-    if (date > 25) return false;
+    if (date > 25) this.#dDayDiscountAmount = 0;
     return this.#dDayDiscountAmount;
   }
 }

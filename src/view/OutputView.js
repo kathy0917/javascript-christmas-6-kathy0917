@@ -42,9 +42,7 @@ const OutputView = {
     Console.print('\n<혜택 내역>');
     const calculatorObject = new Calculator();
     const dDayDiscount = await calculatorObject.calculateDDayDiscount(date);
-    dDayDiscount === false
-      ? Console.print('크리스마스 디데이 할인: 없음')
-      : Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
+    if (dDayDiscount != 0) Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
   },
 
   printTotalBenefitAmount() {
