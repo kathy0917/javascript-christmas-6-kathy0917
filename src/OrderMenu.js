@@ -12,15 +12,14 @@ class orderMenu {
     this.#count = count;
   }
 
-  async splitMenu(menu) {
+  splitMenu(menu) {
     const splitMenu = menu.split('-');
     let [beforeName, beforeCount] = splitMenu;
 
     this.#name = beforeName;
     this.#count = beforeCount;
-    await this.validateMenuForm(menu);
-    await this.validateCntIsNumber();
-    await this.validateExistMenu();
+
+    return [this.#name, this.#count];
   }
 
   async validateCntIsNumber() {
@@ -30,7 +29,7 @@ class orderMenu {
       }
     } catch (error) {
       Console.print(error.message);
-      await InputView.readOrderMenu();
+      return false;
     }
   }
 
@@ -43,9 +42,10 @@ class orderMenu {
         });
       });
       if (flag === false) throw new Error(error.MENU_NOT_VALID_ERROR);
+      return true;
     } catch (error) {
       Console.print(error.message);
-      await InputView.readOrderMenu();
+      return false;
     }
   }
 
@@ -54,7 +54,7 @@ class orderMenu {
       if (!/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]-[0-9]/.test(menu)) throw new Error(error.MENU_NOT_VALID_ERROR);
     } catch (error) {
       Console.print(error.message);
-      await InputView.readOrderMenu();
+      return false;
     }
   }
 
@@ -67,11 +67,14 @@ class orderMenu {
       });
     } catch (error) {
       Console.print(error.message);
-      await InputView.readOrderMenu();
+      return false;
     }
   }
-  resultMenu() {
-    return [this.#name, this.#count];
+
+  async checkError(splitMenus) {
+    if ((await this.validateMenuForm(splitMenus)) === false) return false;
+    if ((await this.validateCntIsNumber()) === false) return false;
+    if ((await this.validateExistMenu()) === false) return false;
   }
 }
 
