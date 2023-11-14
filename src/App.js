@@ -5,7 +5,8 @@ import OutputView from './view/OutputView.js';
 class App {
   async run() {
     OutputView.printOpening();
-    InputView.readDate();
+    await InputView.readDate();
+    await InputView.readOrderMenu();
   }
 }
 
