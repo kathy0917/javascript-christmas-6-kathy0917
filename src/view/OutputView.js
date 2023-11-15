@@ -51,7 +51,9 @@ const OutputView = {
     for (let menu of [...orderMenu.split(',')]) {
       weekDayDiscount += await calculatorObject.calculateWeekDayDiscount(date, menu);
       weekendDiscount += await calculatorObject.calculateWeekendDiscount(date, menu);
+      console.log(weekDayDiscount);
     }
+
     weekDayDiscount = weekDayDiscount * 2023;
     weekendDiscount = weekendDiscount * 2023;
     if (weekDayDiscount !== 0) Console.print(`평일 할인: -${weekDayDiscount.toLocaleString('ko-KR')}원`);

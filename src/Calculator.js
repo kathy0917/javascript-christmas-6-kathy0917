@@ -55,7 +55,7 @@ class Calculator {
     let result = 0;
     const day = new Date(`2023-12-${date}`).getDay();
     for (let ele of [...Menu.dessert]) {
-      if (ele.name === this.#name && day <= 4) result += 1;
+      if (ele.name === this.#name && day <= 4) result = Number(this.#count);
     }
     return result;
   }
@@ -65,7 +65,7 @@ class Calculator {
     let result = 0;
     const day = new Date(`2023-12-${date}`).getDay();
     for (let ele of [...Menu.main]) {
-      if (ele.name === this.#name && day > 4) result += 1;
+      if (ele.name === this.#name && day > 4) result = Number(this.#count);
     }
     return result;
   }
