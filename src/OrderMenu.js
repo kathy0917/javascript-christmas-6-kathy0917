@@ -71,10 +71,40 @@ class orderMenu {
     }
   }
 
+  async validateSizeOverCaution(menuList) {
+    try {
+      const splitMenu = menuList.split(',');
+      let menuCnt = 0;
+      splitMenu.forEach((menu) => {
+        menuCnt += Number(menu.split('-')[1]);
+      });
+      if (menuCnt > 20) throw new Error(error.MENU_SIZE_OVER_CAUTION);
+    } catch (error) {
+      Console.print(error.message);
+      return false;
+    }
+  }
+
+  async validateOnlyBeverageCaution(menuList) {
+    try {
+      const splitMenu = menuList.split(',');
+      let correspondCnt = 0;
+      for (let ele of [...Menu.beverage]) {
+        if (ele.name === this.#name) correspondCnt++;
+      }
+      if (correspondCnt === splitMenu.length) throw new Error(error.MENU_BEVERAGE_CAUTION);
+    } catch (error) {
+      Console.print(error.message);
+      return false;
+    }
+  }
+
   async checkError(splitMenus, menuList) {
     if ((await this.validateDuplicateMenu(menuList)) === false) return false;
     if ((await this.validateMenuForm(splitMenus)) === false) return false;
     if ((await this.validateCntIsNumber()) === false) return false;
+    if ((await this.validateSizeOverCaution(menuList)) === false) return false;
+    if ((await this.validateOnlyBeverageCaution(menuList)) === false) return false;
     if ((await this.validateExistMenu()) === false) return false;
   }
 }

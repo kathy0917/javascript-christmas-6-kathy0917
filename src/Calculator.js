@@ -41,35 +41,35 @@ class Calculator {
     return result;
   }
 
-  async calculateDDayDiscount(date) {
+  async calculateDDayDiscount(date, priceSum) {
     this.#dDayDiscountAmount = 1000 + (date - 1) * 100;
-    if (date > 25) this.#dDayDiscountAmount = 0;
+    if (date > 25 || priceSum < 10000) this.#dDayDiscountAmount = 0;
     return this.#dDayDiscountAmount;
   }
 
-  async calculateWeekDayDiscount(date, orderMenu) {
+  async calculateWeekDayDiscount(date, orderMenu, priceSum) {
     this.splitMenu(orderMenu);
     let result = 0;
     const day = new Date(`2023-12-${date}`).getDay();
     for (let ele of [...Menu.dessert]) {
-      if (ele.name === this.#name && day <= 4) result = Number(this.#count);
+      if (ele.name === this.#name && day <= 4 && priceSum >= 10000) result = Number(this.#count);
     }
     return result;
   }
 
-  async calculateWeekendDiscount(date, orderMenu) {
+  async calculateWeekendDiscount(date, orderMenu, priceSum) {
     this.splitMenu(orderMenu);
     let result = 0;
     const day = new Date(`2023-12-${date}`).getDay();
     for (let ele of [...Menu.main]) {
-      if (ele.name === this.#name && day > 4) result = Number(this.#count);
+      if (ele.name === this.#name && day > 4 && priceSum >= 10000) result = Number(this.#count);
     }
     return result;
   }
 
-  async calculateSpecialDiscount(date) {
+  async calculateSpecialDiscount(date, priceSum) {
     let result = 0;
-    if (StarDate.includes(Number(date))) result = 1000;
+    if (StarDate.includes(Number(date)) && priceSum >= 10000) result = 1000;
     return result;
   }
 }
