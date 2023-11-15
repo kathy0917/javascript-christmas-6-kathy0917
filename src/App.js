@@ -12,7 +12,7 @@ class App {
     }
     let menu = '';
     while (true) {
-      menu = await InputView.readOrderMenu(date);
+      menu = await InputView.readOrderMenu();
       if (menu) {
         await OutputView.printVisitDate(date, menu);
         break;

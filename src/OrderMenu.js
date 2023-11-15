@@ -1,6 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
 import * as error from './constants/Error.js';
-import InputView from './view/InputView.js';
 import Menu from './Constants/Menu.js';
 
 class orderMenu {

@@ -1,8 +1,3 @@
-import { Console } from '@woowacourse/mission-utils';
-import * as error from '../constants/Error.js';
-import InputView from '../view/InputView.js';
-import orderMenu from '../orderMenu.js';
-
 const WeekBenefits = {
   async calculateWeekDayBenefitSum(calculatorObject, orderMenu, date) {
     let weekDayDiscount = 0;
