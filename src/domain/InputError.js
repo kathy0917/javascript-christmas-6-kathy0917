@@ -1,6 +1,6 @@
 import { Console } from '@woowacourse/mission-utils';
 import * as error from '../constants/Error.js';
-import orderMenu from '../orderMenu.js';
+import OrderMenu from '../OrderMenu.js';
 
 const InputError = {
   async checkVisitDateError(visitDate) {
@@ -17,7 +17,7 @@ const InputError = {
   async checkOrderMenuError(menu) {
     const splitMenus = menu.split(',').map((ele) => ele);
     const orderMenuList = [];
-    const orderMenuObject = new orderMenu();
+    const orderMenuObject = new OrderMenu();
     let result = true;
 
     for (let ele of splitMenus) {
