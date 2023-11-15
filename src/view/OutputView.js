@@ -28,34 +28,53 @@ const OutputView = {
       priceSum += await calculatorObject.calculateTotalOrderAmount();
     }
     Console.print(`${priceSum.toLocaleString('ko-KR')}원`);
-    await this.printGivewayMenu(date, priceSum);
+    await this.printGivewayMenu(date, priceSum, orderMenu);
   },
 
-  async printGivewayMenu(date, priceSum) {
+  async printGivewayMenu(date, priceSum, orderMenu) {
     Console.print('\n<증정 메뉴>');
     const calculatorObject = new Calculator();
-    (await calculatorObject.calculateGivewayMenu(priceSum)) === true ? Console.print('샴페인 1개') : Console.print('없음');
-    await this.printBenefitDetails(date, priceSum);
+    (await calculatorObject.calculateGivewayMenu(priceSum)) > 0 ? Console.print('샴페인 1개') : Console.print('없음');
+    await this.printBenefitDetails(date, priceSum, orderMenu);
   },
 
-  async printBenefitDetails(date, priceSum) {
+  async printBenefitDetails(date, priceSum, orderMenu) {
     Console.print('\n<혜택 내역>');
     const calculatorObject = new Calculator();
     const dDayDiscount = await calculatorObject.calculateDDayDiscount(date);
-    if (dDayDiscount != 0) Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
+    if (dDayDiscount !== 0) Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
     const givewayDiscount = await calculatorObject.calculateGivewayMenu(priceSum);
     if (givewayDiscount) Console.print(`증정 이벤트: -${givewayDiscount.toLocaleString('ko-KR')}원`);
+    let weekDayDiscount = 0;
+    let weekendDiscount = 0;
+    for (let menu of [...orderMenu.split(',')]) {
+      weekDayDiscount += await calculatorObject.calculateWeekDayDiscount(date, menu);
+      weekendDiscount += await calculatorObject.calculateWeekendDiscount(date, menu);
+    }
+    weekDayDiscount = weekDayDiscount * 2023;
+    weekendDiscount = weekendDiscount * 2023;
+    if (weekDayDiscount !== 0) Console.print(`평일 할인: -${weekDayDiscount.toLocaleString('ko-KR')}원`);
+    if (weekendDiscount !== 0) Console.print(`주말 할인: -${weekendDiscount.toLocaleString('ko-KR')}원`);
+    const specialDiscount = await calculatorObject.calculateSpecialDiscount(date);
+    if (specialDiscount !== 0) Console.print(`특별 할인: -${specialDiscount.toLocaleString('ko-KR')}원`);
+    //await this.printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount);
   },
 
-  printTotalBenefitAmount() {
-    Console.print('\n<총혜택 금액>');
-  },
-  printTotalAmountAfterDiscount() {
-    Console.print('\n<할인 후 예상 결제 금액>');
-  },
-  printEventBadge() {
-    Console.print('\n<12월 이벤트 배지>');
-  },
+  // async printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount) {
+  //   Console.print('\n<총혜택 금액>');
+  //   const totalBenefitAmount = dDayDiscount + weekDayDiscount + weekendDiscount + specialDiscount;
+  //   Console.print(`-${totalBenefitAmount + givewayDiscount}원`);
+  //   await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount);
+  // },
+
+  // async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount) {
+  //   Console.print('\n<할인 후 예상 결제 금액>');
+  //   Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
+  //   //this.printEventBadge(totalBenefitAmount);
+  // },
+  // printEventBadge(totalBenefitAmount) {
+  //   Console.print('\n<12월 이벤트 배지>');
+  // },
 };
 
 export default OutputView;

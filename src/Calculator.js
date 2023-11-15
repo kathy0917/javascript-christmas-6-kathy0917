@@ -2,22 +2,19 @@ import { Console } from '@woowacourse/mission-utils';
 import * as error from './constants/Error.js';
 import InputView from './view/InputView.js';
 import Menu from './Constants/Menu.js';
+import { StarDate } from './constants/StarDate.js';
 
 class Calculator {
-  #orderMenu;
   #name;
   #count;
   #totalOrderAmount;
   #dDayDiscountAmount;
-  #giveWayAmount;
 
-  constructor(orderMenu, name, count, totalOrderAmount, dDayDiscountAmount, giveWayAmount) {
-    this.#orderMenu = orderMenu;
+  constructor(name, count, totalOrderAmount, dDayDiscountAmount) {
     this.#name = name;
     this.#count = count;
     this.#totalOrderAmount = totalOrderAmount;
     this.#dDayDiscountAmount = dDayDiscountAmount;
-    this.#giveWayAmount = giveWayAmount;
   }
 
   async splitMenu(menu) {
@@ -41,11 +38,10 @@ class Calculator {
   }
 
   async calculateGivewayMenu(totalOrderAmount) {
-    if (totalOrderAmount > 120000) {
-      this.#giveWayAmount = 25000;
-      return this.#giveWayAmount;
-    }
-    return false;
+    let result = 0;
+    if (totalOrderAmount > 120000) result = 25000;
+
+    return result;
   }
 
   async calculateDDayDiscount(date) {
@@ -54,7 +50,31 @@ class Calculator {
     return this.#dDayDiscountAmount;
   }
 
-  async calculateWeekDayDiscount(date) {}
+  async calculateWeekDayDiscount(date, orderMenu) {
+    this.splitMenu(orderMenu);
+    let result = 0;
+    const day = new Date(`2023-12-${date}`).getDay();
+    for (let ele of [...Menu.dessert]) {
+      if (ele.name === this.#name && day <= 4) result += 1;
+    }
+    return result;
+  }
+
+  async calculateWeekendDiscount(date, orderMenu) {
+    this.splitMenu(orderMenu);
+    let result = 0;
+    const day = new Date(`2023-12-${date}`).getDay();
+    for (let ele of [...Menu.main]) {
+      if (ele.name === this.#name && day > 4) result += 1;
+    }
+    return result;
+  }
+
+  async calculateSpecialDiscount(date) {
+    let result = 0;
+    if (StarDate.includes(Number(date))) result = 1000;
+    return result;
+  }
 }
 
 export default Calculator;
