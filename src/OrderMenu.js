@@ -59,18 +59,20 @@ class orderMenu {
 
   async validateDuplicateMenu(menuList) {
     try {
-      menuList.forEach(([prev], prevIdx) => {
-        menuList.forEach(([cur], curIdx) => {
-          if (prevIdx !== curIdx && prev === cur) throw new Error(error.MENU_NOT_VALID_ERROR);
-        });
+      const menuSet = new Set();
+      const splitMenu = menuList.split(',');
+      splitMenu.forEach((ele) => {
+        menuSet.add(ele.split('-')[0]);
       });
+      if (menuSet.size !== splitMenu.length) throw new Error(error.MENU_NOT_VALID_ERROR);
     } catch (error) {
       Console.print(error.message);
       return false;
     }
   }
 
-  async checkError(splitMenus) {
+  async checkError(splitMenus, menuList) {
+    if ((await this.validateDuplicateMenu(menuList)) === false) return false;
     if ((await this.validateMenuForm(splitMenus)) === false) return false;
     if ((await this.validateCntIsNumber()) === false) return false;
     if ((await this.validateExistMenu()) === false) return false;

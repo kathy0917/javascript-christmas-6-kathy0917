@@ -23,7 +23,7 @@ const InputError = {
     for (let ele of splitMenus) {
       const [name, cnt] = orderMenuObject.splitMenu(ele);
       orderMenuList.push([name, cnt]);
-      result = await orderMenuObject.checkError(ele);
+      result = await orderMenuObject.checkError(ele, menu);
       if (result === false) break;
     }
 
