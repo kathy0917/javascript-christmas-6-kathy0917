@@ -58,13 +58,16 @@ const OutputView = {
     if (weekendDiscount !== 0) Console.print(`주말 할인: -${weekendDiscount.toLocaleString('ko-KR')}원`);
     const specialDiscount = await calculatorObject.calculateSpecialDiscount(date);
     if (specialDiscount !== 0) Console.print(`특별 할인: -${specialDiscount.toLocaleString('ko-KR')}원`);
+    if (dDayDiscount === 0 && givewayDiscount === 0 && weekDayDiscount === 0 && weekendDiscount === 0 && specialDiscount === 0) Console.print('없음');
     await this.printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount);
   },
 
   async printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount) {
     Console.print('\n<총혜택 금액>');
     const totalBenefitAmount = dDayDiscount + weekDayDiscount + weekendDiscount + specialDiscount;
-    Console.print(`-${(totalBenefitAmount + givewayDiscount).toLocaleString('ko-KR')}원`);
+    totalBenefitAmount + givewayDiscount === 0
+      ? Console.print('0원')
+      : Console.print(`-${(totalBenefitAmount + givewayDiscount).toLocaleString('ko-KR')}원`);
     await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount, givewayDiscount);
   },
 
