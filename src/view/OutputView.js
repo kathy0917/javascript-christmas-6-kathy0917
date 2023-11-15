@@ -1,5 +1,6 @@
 import { Console } from '@woowacourse/mission-utils';
 import Calculator from '../Calculator.js';
+import Badge from '../constants/Badge.js';
 
 const OutputView = {
   printOpening() {
@@ -70,11 +71,16 @@ const OutputView = {
   async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount) {
     Console.print('\n<할인 후 예상 결제 금액>');
     Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
-    //this.printEventBadge(totalBenefitAmount);
+    this.printEventBadge(totalBenefitAmount);
   },
-  // printEventBadge(totalBenefitAmount) {
-  //   Console.print('\n<12월 이벤트 배지>');
-  // },
+  printEventBadge(totalBenefitAmount) {
+    Console.print('\n<12월 이벤트 배지>');
+    let badge = '';
+    [...Badge].map((ele) => {
+      if (totalBenefitAmount >= ele.price) badge = ele.name;
+    });
+    Console.print(`${badge === '' ? '없음' : badge}`);
+  },
 };
 
 export default OutputView;
