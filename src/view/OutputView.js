@@ -2,10 +2,11 @@ import { Console } from '@woowacourse/mission-utils';
 import Calculator from '../Calculator.js';
 import Badge from '../constants/Badge.js';
 import WeekBenefits from '../domain/WeekBenefit.js';
+import * as MESSAGE from '../constants/Message.js';
 
 const OutputView = {
   printOpening() {
-    Console.print('안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.');
+    Console.print(MESSAGE.OUTPUT_OPENING);
   },
 
   async printVisitDate(visitDate, orderMenu) {
@@ -14,14 +15,14 @@ const OutputView = {
   },
 
   async printMenu(orderMenu) {
-    Console.print('\n<주문 메뉴>');
+    Console.print(MESSAGE.OUTPUT_ORDER_MENU);
     orderMenu.split(',').map((menu) => {
       Console.print(`${menu.split('-')[0]} ${menu.split('-')[1]}개`);
     });
   },
 
   async printTotalOrderAmount(date, orderMenu) {
-    Console.print('\n<할인 전 총주문 금액>');
+    Console.print(MESSAGE.OUTPUT_ORDER_AMOUNT);
     let priceSum = 0;
     const menuList = orderMenu.split(',');
     for (let menu of menuList) {
@@ -30,19 +31,19 @@ const OutputView = {
       priceSum += await calculatorObject.calculateTotalOrderAmount();
     }
     Console.print(`${priceSum.toLocaleString('ko-KR')}원`);
-    if (priceSum < 10000) Console.print('총주문 금액 10,000원 이상부터 이벤트가 적용됩니다.');
+    if (priceSum < 10000) Console.print(MESSAGE.ORDER_AMOUNT_CAUTION);
     await this.printGivewayMenu(date, priceSum, orderMenu);
   },
 
   async printGivewayMenu(date, priceSum, orderMenu) {
-    Console.print('\n<증정 메뉴>');
+    Console.print(MESSAGE.OUTPUT_GIVEWAY_MENU);
     const calculatorObject = new Calculator();
-    (await calculatorObject.calculateGivewayMenu(priceSum)) > 0 ? Console.print('샴페인 1개') : Console.print('없음');
+    (await calculatorObject.calculateGivewayMenu(priceSum)) > 0 ? Console.print('샴페인 1개') : Console.print(MESSAGE.OUTPUT_NOTHING);
     await this.printBenefitDetails(date, priceSum, orderMenu);
   },
 
   async printBenefitDetails(date, priceSum, orderMenu) {
-    Console.print('\n<혜택 내역>');
+    Console.print(MESSAGE.OUTPUT_BENEFIT_DETAILS);
     const calculatorObject = new Calculator();
     const dDayDiscount = await calculatorObject.calculateDDayDiscount(date, priceSum);
     if (dDayDiscount !== 0) Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
@@ -56,29 +57,29 @@ const OutputView = {
 
     const specialDiscount = await calculatorObject.calculateSpecialDiscount(date, priceSum);
     if (specialDiscount !== 0) Console.print(`특별 할인: -${specialDiscount.toLocaleString('ko-KR')}원`);
-    if ((dDayDiscount === 0 && givewayDiscount === 0 && weekDayDiscount === 0 && weekendDiscount === 0 && specialDiscount === 0) || priceSum < 10000) Console.print('없음');
+    if ((dDayDiscount === 0 && givewayDiscount === 0 && weekDayDiscount === 0 && weekendDiscount === 0 && specialDiscount === 0) || priceSum < 10000) Console.print(MESSAGE.OUTPUT_NOTHING);
     await this.printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount);
   },
   async printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount) {
-    Console.print('\n<총혜택 금액>');
+    Console.print(MESSAGE.OUTPUT_BENEFIT_AMOUNT);
     const totalBenefitAmount = dDayDiscount + weekDayDiscount + weekendDiscount + specialDiscount;
     totalBenefitAmount + givewayDiscount === 0 ? Console.print('0원') : Console.print(`-${(totalBenefitAmount + givewayDiscount).toLocaleString('ko-KR')}원`);
     await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount, givewayDiscount);
   },
 
   async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount, givewayDiscount) {
-    Console.print('\n<할인 후 예상 결제 금액>');
+    Console.print(MESSAGE.OUTPUT_AMOUNT_AFTER_DISCOUNT);
     Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
     this.printEventBadge(totalBenefitAmount, givewayDiscount);
   },
 
   printEventBadge(totalBenefitAmount, givewayDiscount) {
-    Console.print('\n<12월 이벤트 배지>');
+    Console.print(MESSAGE.OUTPUT_EVENT_BADGE);
     let badge = '';
     [...Badge].map((ele) => {
       if (totalBenefitAmount + givewayDiscount >= ele.price) badge = ele.name;
     });
-    Console.print(`${badge === '' ? '없음' : badge}`);
+    Console.print(`${badge === '' ? MESSAGE.OUTPUT_NOTHING : badge}`);
   },
 };
 
