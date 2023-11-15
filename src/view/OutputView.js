@@ -1,6 +1,7 @@
 import { Console } from '@woowacourse/mission-utils';
 import Calculator from '../Calculator.js';
 import Badge from '../constants/Badge.js';
+import WeekBenefits from '../domain/WeekBenefit.js';
 
 const OutputView = {
   printOpening() {
@@ -46,22 +47,17 @@ const OutputView = {
     if (dDayDiscount !== 0) Console.print(`크리스마스 디데이 할인: -${dDayDiscount.toLocaleString('ko-KR')}원`);
     const givewayDiscount = await calculatorObject.calculateGivewayMenu(priceSum);
     if (givewayDiscount) Console.print(`증정 이벤트: -${givewayDiscount.toLocaleString('ko-KR')}원`);
-    let weekDayDiscount = 0;
-    let weekendDiscount = 0;
-    for (let menu of [...orderMenu.split(',')]) {
-      weekDayDiscount += await calculatorObject.calculateWeekDayDiscount(date, menu);
-      weekendDiscount += await calculatorObject.calculateWeekendDiscount(date, menu);
-    }
-    weekDayDiscount = weekDayDiscount * 2023;
-    weekendDiscount = weekendDiscount * 2023;
+
+    let weekDayDiscount = await WeekBenefits.calculateWeekDayBenefitSum(calculatorObject, orderMenu, date);
+    let weekendDiscount = await WeekBenefits.calculateWeekendBenefitSum(calculatorObject, orderMenu, date);
     if (weekDayDiscount !== 0) Console.print(`평일 할인: -${weekDayDiscount.toLocaleString('ko-KR')}원`);
     if (weekendDiscount !== 0) Console.print(`주말 할인: -${weekendDiscount.toLocaleString('ko-KR')}원`);
+
     const specialDiscount = await calculatorObject.calculateSpecialDiscount(date);
     if (specialDiscount !== 0) Console.print(`특별 할인: -${specialDiscount.toLocaleString('ko-KR')}원`);
     if (dDayDiscount === 0 && givewayDiscount === 0 && weekDayDiscount === 0 && weekendDiscount === 0 && specialDiscount === 0) Console.print('없음');
     await this.printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount);
   },
-
   async printTotalBenefitAmount(priceSum, dDayDiscount, givewayDiscount, weekDayDiscount, weekendDiscount, specialDiscount) {
     Console.print('\n<총혜택 금액>');
     const totalBenefitAmount = dDayDiscount + weekDayDiscount + weekendDiscount + specialDiscount;
@@ -76,6 +72,7 @@ const OutputView = {
     Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
     this.printEventBadge(totalBenefitAmount, givewayDiscount);
   },
+
   printEventBadge(totalBenefitAmount, givewayDiscount) {
     Console.print('\n<12월 이벤트 배지>');
     let badge = '';
