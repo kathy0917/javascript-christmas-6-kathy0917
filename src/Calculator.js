@@ -1,4 +1,4 @@
-import Menu from './Constants/Menu.js';
+import Menu from './constants/Menu.js';
 import { StarDate } from './constants/StarDate.js';
 
 class Calculator {
