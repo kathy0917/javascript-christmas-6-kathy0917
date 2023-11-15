@@ -64,14 +64,14 @@ const OutputView = {
     Console.print('\n<총혜택 금액>');
     const totalBenefitAmount = dDayDiscount + weekDayDiscount + weekendDiscount + specialDiscount;
     Console.print(`-${(totalBenefitAmount + givewayDiscount).toLocaleString('ko-KR')}원`);
-    // await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount);
+    await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount);
   },
 
-  // async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount) {
-  //   Console.print('\n<할인 후 예상 결제 금액>');
-  //   Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
-  //   //this.printEventBadge(totalBenefitAmount);
-  // },
+  async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount) {
+    Console.print('\n<할인 후 예상 결제 금액>');
+    Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
+    //this.printEventBadge(totalBenefitAmount);
+  },
   // printEventBadge(totalBenefitAmount) {
   //   Console.print('\n<12월 이벤트 배지>');
   // },
