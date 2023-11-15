@@ -1,6 +1,6 @@
 import { Console } from '@woowacourse/mission-utils';
 import * as error from './constants/Error.js';
-import Menu from './Constants/Menu.js';
+import Menu from './constants/Menu.js';
 
 class OrderMenu {
   #name;
