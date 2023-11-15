@@ -51,9 +51,7 @@ const OutputView = {
     for (let menu of [...orderMenu.split(',')]) {
       weekDayDiscount += await calculatorObject.calculateWeekDayDiscount(date, menu);
       weekendDiscount += await calculatorObject.calculateWeekendDiscount(date, menu);
-      console.log(weekDayDiscount);
     }
-
     weekDayDiscount = weekDayDiscount * 2023;
     weekendDiscount = weekendDiscount * 2023;
     if (weekDayDiscount !== 0) Console.print(`평일 할인: -${weekDayDiscount.toLocaleString('ko-KR')}원`);
@@ -67,19 +65,19 @@ const OutputView = {
     Console.print('\n<총혜택 금액>');
     const totalBenefitAmount = dDayDiscount + weekDayDiscount + weekendDiscount + specialDiscount;
     Console.print(`-${(totalBenefitAmount + givewayDiscount).toLocaleString('ko-KR')}원`);
-    await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount);
+    await this.printTotalAmountAfterDiscount(priceSum, totalBenefitAmount, givewayDiscount);
   },
 
-  async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount) {
+  async printTotalAmountAfterDiscount(priceSum, totalBenefitAmount, givewayDiscount) {
     Console.print('\n<할인 후 예상 결제 금액>');
     Console.print(`${(priceSum - totalBenefitAmount).toLocaleString('ko-KR')}원`);
-    this.printEventBadge(totalBenefitAmount);
+    this.printEventBadge(totalBenefitAmount, givewayDiscount);
   },
-  printEventBadge(totalBenefitAmount) {
+  printEventBadge(totalBenefitAmount, givewayDiscount) {
     Console.print('\n<12월 이벤트 배지>');
     let badge = '';
     [...Badge].map((ele) => {
-      if (totalBenefitAmount >= ele.price) badge = ele.name;
+      if (totalBenefitAmount + givewayDiscount >= ele.price) badge = ele.name;
     });
     Console.print(`${badge === '' ? '없음' : badge}`);
   },
