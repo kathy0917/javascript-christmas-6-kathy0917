@@ -2,7 +2,7 @@ import { Console } from '@woowacourse/mission-utils';
 import * as error from './constants/Error.js';
 import Menu from './Constants/Menu.js';
 
-class orderMenu {
+class OrderMenu {
   #name;
   #count;
 
@@ -109,4 +109,4 @@ class orderMenu {
   }
 }
 
-export default orderMenu;
+export default OrderMenu;
